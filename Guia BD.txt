@@ -2,5 +2,18 @@ Procure que al importar la base de datos colocarle el nombre de wikiprog o si de
 $database = 'Nuevo Nombre'
 
 A la hora de importar la base de datos revise que se importen todas sus tablas, cuenta con las siguientes tablas
-archivo, categoria, comentarios, curso, inscripcion, leccion, privacidad, rango, registrar, usuario
+los de contenido del usuario
+archivo:archivo_id,usuario_id,nombre,fecha,tamaño,privacidad_id
+privacidad:privacidad_id, tipo
 
+los relacionados con los cursos
+categoria:categoria_id, descripcion
+comentarios:comentario_id, usuario_id, comentario, fecha, curso_id
+curso:curso_id, titulo_curso, descripcion, categoria_id
+leccion:leccion_id, titulo, descripcion, curso_id
+
+los relacionados con los usuarios
+rango:rango_id, descripcion
+registrar:registrar_id, usuario, correo, contraseña, terminos_y_condiciones
+usuario:usuario_id, usuario, correo, biografia, contraseña, rango_id
+“Los servicios de Office 365 con dominio @soy.sena.edu.co para Aprendices del SENA son soportados tecnológicamente por © Microsoft y ofrecidos por el Servicio Nacional de Aprendizaje – SENA de manera gratuita a los aprendices matriculados en carreras técnicas (auxiliar, técnico, tecnólogo, profundización técnica, especialización tecnológica, operario) en las modalidades presencial o virtual. Las opiniones que contenga este mensaje son exclusivas de su autor y no representan la opinión del Servicio Nacional de Aprendizaje SENA o de sus autoridades. El receptor deberá verificar posibles virus informáticos que tenga el correo o cualquier anexo, razón por la cual el SENA no es responsable de los daños causados por cualquier virus o información que sea transmitida en correos electrónicos de cuentas con dominio @soy.sena.edu.co. Los contenidos, textos, imágenes, archivos enviados en este mensaje son responsabilidad exclusiva del remitente y no reflejan ni comprometen de ninguna manera a la Entidad. No se autoriza el uso de esta herramienta para el intercambio de correos masivos, cadenas o spam, ni de mensajes ofensivos, de carácter político, sexual o religioso, con fines de lucro, con propósitos delictivos o cualquier otro mensaje que se considere indebido o que vaya en contra de la Ley.”
