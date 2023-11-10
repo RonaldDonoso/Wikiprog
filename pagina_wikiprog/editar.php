@@ -1,8 +1,8 @@
 <?php
-// Va a incluir las funciones necesarias del archivo "funciones.php"
+// Incluye las funciones necesarias del archivo "funciones.php"
 include("funciones.php");
 
-// Va a requerir el archivo de configuración "config.php" que contiene los datos de conexión a la base de datos
+// Requiere el archivo de configuración "config.php" que contiene los datos de conexión a la base de datos
 require('config.php');
 
 // Establece una conexión con la base de datos utilizando los valores de "config.php"
@@ -11,10 +11,10 @@ $conexion = mysqli_connect($host, $user, $password, $database);
 // Obtiene el valor del parámetro "registrar_id" desde la URL para identificar al usuario
 $registrar_id = $_GET['registrar_id'];
 
-// Verificamos si se ha enviado un formulario de edición mediante una solicitud GET
+// Verifica si se ha enviado un formulario de edición mediante una solicitud GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-    // Recopilamos los datos del formulario, si están disponibles en la URL
+    // Recopila los datos del formulario, si están disponibles en la URL
     $usuario = isset($_GET['usuario']) ? $_GET['usuario'] : '';
     $correo = isset($_GET['correo']) ? $_GET['correo'] : '';
     $contraseña = isset($_GET['contraseña']) ? $_GET['contraseña'] : '';
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Comprueba si alguno de los datos está vacío antes de realizar las actualizaciones
     if (!empty($usuario) || !empty($correo) || !empty($contraseña) || !empty($biografia)) {
-        // Realizamos la actualización en la base de datos
+        // Realiza la actualización en la base de datos
         $actualizar = editarUsuario($conexion, $registrar_id, $usuario, $correo, $contraseña, editarBiografia($conexion, $registrar_id, $biografia));
 
         if ($actualizar) {
@@ -48,4 +48,4 @@ echo $resultados;
 ?>
 
 <!-- Enlace para volver a la página de perfil -->
-<a href="perfil.php?registrar_id=<?php echo $registrar_id?>">Volver</a>
+<a href="perfil.php?registrar_id=<?php echo $registrar_id ?>">Volver</a>

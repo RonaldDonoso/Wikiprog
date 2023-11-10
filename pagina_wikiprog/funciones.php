@@ -332,122 +332,196 @@ function editarBiografia($conexion, $registrar_id, $biografia) {
 
 //--------------------------------------------------------------------------------------------
 
-// Function to display course information
+/**
+ * Muestra la información detallada de un curso.
+ *
+ * @param mysqli $conexion - Objeto de conexión a la base de datos.
+ * @param int $curso_id - ID del curso del cual se mostrará la información.
+ * @return string - Cadena que contiene la información detallada del curso.
+ */
 function llamar_tabla_curso($conexion, $curso_id) {
-    // Fetch course details from the database
-    $query = "SELECT * FROM curso where curso_id = $curso_id";
+    // Consulta para obtener los detalles del curso con la ID proporcionada
+    $query = "SELECT * FROM curso WHERE curso_id = $curso_id";
+    
+    // Ejecutar la consulta
     $result = mysqli_query($conexion, $query);
 
+    // Inicializar la cadena `$salida`
     $salida = '';
 
+    // Iterar sobre los resultados de la consulta
     while ($row = mysqli_fetch_assoc($result)) {
         $salida .= '<tr>';
         $salida .= '<td>' . "TITULO: " . $row['titulo_curso'] . '</td>' . '<br>';
-        $salida .= '<td>' . "Descripcion: " . $row['descripcion'] . '</td>' . '<br>';
+        $salida .= '<td>' . "Descripción: " . $row['descripcion'] . '</td>' . '<br>';
         $salida .= '</tr>' . '<br>';
     }
 
+    // Devolver la cadena `$salida`
     return $salida;
+}
+
+
+//--------------------------------------------------------------------------------------------
+
+/**
+ * Obtiene la descripción de una categoría a partir de su ID.
+ *
+ * @param mysqli $conexion - Objeto de conexión a la base de datos.
+ * @param int $categoria_id - ID de la categoría cuya descripción se va a obtener.
+ * @return string - Cadena que contiene la descripción de la categoría.
+ */
+function categoria($conexion, $categoria_id) {
+    // Consulta para obtener la descripción de la categoría con la ID proporcionada
+    $consulta = "SELECT * FROM categoria WHERE categoria_id = '$categoria_id'";
+    
+    // Ejecutar la consulta
+    $resultado = mysqli_query($conexion, $consulta);
+
+    // Verificar si la consulta se ejecutó correctamente y si hay resultados
+    if ($resultado && mysqli_num_rows($resultado) > 0) {
+        // Obtener la fila de resultados
+        $fila = mysqli_fetch_assoc($resultado);
+
+        // Devolver la descripción de la categoría
+        return "Categoria: " . $fila['descripcion'] . "<br>";
+    } else {
+        // Devolver un mensaje si la categoría no se encuentra
+        return "Usuario no encontrado.";
+    }
 }
 
 //--------------------------------------------------------------------------------------------
 
-    function categoria($conexion, $categoria_id) {
-        $consulta = "SELECT * FROM categoria WHERE categoria_id = '$categoria_id'";
+/**
+ * Obtiene el ID de la categoría de un curso a partir de su ID.
+ *
+ * @param mysqli $conexion - Objeto de conexión a la base de datos.
+ * @param int $curso_id - ID del curso del cual se obtendrá el ID de la categoría.
+ * @return string - Cadena que contiene el ID de la categoría del curso.
+ */
+function consulta_categoria($conexion, $curso_id) {
+    // Consulta para obtener el ID de la categoría del curso con la ID proporcionada
+    $consulta = "SELECT * FROM curso WHERE curso_id = '$curso_id'";
+    
+    // Ejecutar la consulta
+    $resultado = mysqli_query($conexion, $consulta);
 
-        $resultado = mysqli_query($conexion, $consulta);
+    // Verificar si la consulta se ejecutó correctamente y si hay resultados
+    if ($resultado && mysqli_num_rows($resultado) > 0) {
+        // Obtener la fila de resultados
+        $fila = mysqli_fetch_assoc($resultado);
 
-        if ($resultado && mysqli_num_rows($resultado) > 0) {
-            $fila = mysqli_fetch_assoc($resultado);
-
-            return 
-                "Categoria: " . $fila['descripcion'] . "<br>";
-        } else {
-            return "Usuario no encontrado.";
-        }
+        // Devolver el ID de la categoría del curso
+        return "categoria_id: " . $fila['categoria_id'] . "<br>";
+    } else {
+        // Devolver un mensaje si el curso no se encuentra
+        return "Usuario no encontrado.";
     }
+}
 
-    //--------------------------------------------------------------------------------------------
 
-    function consulta_categoria($conexion, $curso_id) {
-        $consulta = "SELECT * FROM curso WHERE curso_id = '$curso_id'";
-
-        $resultado = mysqli_query($conexion, $consulta);
-
-        if ($resultado && mysqli_num_rows($resultado) > 0) {
-            $fila = mysqli_fetch_assoc($resultado);
-
-            return 
-                "categoria_id: " . $fila['categoria_id'] . "<br>";
-        } else {
-            return "Usuario no encontrado.";
-        }
-    }
 //--------------------------------------------------------------------------------------------
 
-
-// Function to display comments
+/**
+ * Obtiene la información de los comentarios de un curso específico.
+ *
+ * @param mysqli $conexion - Objeto de conexión a la base de datos.
+ * @param int $curso_id - ID del curso del cual se mostrarán los comentarios.
+ * @return string - Cadena que contiene la información de los comentarios del curso.
+ */
 function Comentarios($conexion, $curso_id) {
-    $query = "SELECT * FROM comentarios where curso_id = $curso_id";
+    // Consulta para obtener los comentarios del curso específico
+    $query = "SELECT * FROM comentarios WHERE curso_id = $curso_id";
     $result = mysqli_query($conexion, $query);
 
+    // Inicializar la cadena `$salida`
     $salida = '';
 
+    // Verificar si la consulta se ejecutó correctamente
     if ($result) {
+        // Verificar si hay comentarios disponibles
         if (mysqli_num_rows($result) > 0) {
+            // Iterar sobre los resultados de la consulta y construir la cadena `$salida`
             while ($row = mysqli_fetch_assoc($result)) {
                 $salida .= '<tr>';
-                $salida .= '<td>' . "usuario: " . $row['usuario_id'] . '</td>' . '<br>';
-                $salida .= '<td>' . "comentario: " . $row['descripcion'] . '</td>' . '<br>';
-                $salida .= '<td>' . "fecha: " . $row['fecha'] . '</td>' . '<br>';
+                $salida .= '<td>' . "Usuario: " . $row['usuario_id'] . '</td>' . '<br>';
+                $salida .= '<td>' . "Comentario: " . $row['descripcion'] . '</td>' . '<br>';
+                $salida .= '<td>' . "Fecha: " . $row['fecha'] . '</td>' . '<br>';
                 $salida .= '</tr>' . '<br>';
             }
         } else {
             $salida .= 'No hay comentarios para este curso.';
         }
     } else {
+        // Manejar errores si la consulta no se ejecuta correctamente
         $salida .= "Error ejecutando consulta: " . mysqli_error($conexion);
-        exit;
+        exit; // Salir del script en caso de error
     }
 
+    // Devolver la cadena `$salida`
     return $salida;
 }
 
-// Function to add a comment
+
+//--------------------------------------------------------------------------------------------
+
+/**
+ * Agrega un comentario a un curso específico.
+ *
+ * @param mysqli $conexion - Objeto de conexión a la base de datos.
+ * @param int $curso_id - ID del curso al que se agrega el comentario.
+ * @param int $usuario_id - ID del usuario que realiza el comentario.
+ * @param string $descripcion - Descripción del comentario.
+ * @return bool - Devuelve true si el comentario se agrega con éxito, false en caso contrario.
+ */
 function agregar_comentario($conexion, $curso_id, $usuario_id, $descripcion) {
-    // Validate comment input
+    // Validar la entrada del comentario
     if (empty($descripcion)) {
         return false;
     }
 
-    // Prepare and execute the query
+    // Preparar y ejecutar la consulta
     $query = "INSERT INTO comentarios (curso_id, usuario_id, descripcion, fecha) VALUES (?, ?, ?, NOW())";
     $stmt = mysqli_prepare($conexion, $query);
+
+    // Vincular los parámetros y ejecutar la consulta preparada
     mysqli_stmt_bind_param($stmt, "iis", $curso_id, $usuario_id, $descripcion);
     $result = mysqli_stmt_execute($stmt);
+
+    // Cerrar la consulta preparada
     mysqli_stmt_close($stmt);
 
+    // Devolver el resultado de la ejecución de la consulta
     return $result;
 }
 
+
+
 //--------------------------------------------------------------------------------------------
 
-
+/**
+ * Muestra la información de los cursos disponibles.
+ * Utiliza un enlace para dirigir a los usuarios a la página de detalles del curso.
+ */
 function mostrarCursos() {
-    global $conexion, $registrar_id;
+    global $conexion, $registrar_id; // Se asume que $conexion y $registrar_id están definidos en un alcance superior
 
-    // Mostrar la información de los cursos
+    // Consultar la información de los cursos en la base de datos
     $sql = "SELECT curso_id, titulo_curso, descripcion FROM curso";
     $result = $conexion->query($sql);
 
+    // Verificar si hay cursos disponibles
     if ($result->num_rows > 0) {
         echo "LISTA DE CURSOS:<br> <br>";
+
+        // Iterar sobre los resultados de la consulta
         while ($row = $result->fetch_assoc()) {
             $curso_id = $row["curso_id"];
             $titulo_curso = htmlspecialchars($row["titulo_curso"]). "<br>"; // Escapar datos para evitar XSS
             $descripcion = htmlspecialchars($row["descripcion"]); // Escapar datos para evitar XSS
 
-            // Agregar un enlace a una página (reemplaza 'tu_pagina.php' con la URL correcta)
+            // Agregar un enlace a la página del curso con información de usuario y curso en la URL
             echo "Título: <a href='curso.php?registrar_id=$registrar_id&curso_id=$curso_id'>$titulo_curso</a> Descripción: $descripcion<br>";
         }
     } else {
@@ -455,24 +529,34 @@ function mostrarCursos() {
     }
 }
 
+
+
 //--------------------------------------------------------------------------------------------
 
+/**
+ * Muestra la información de las lecciones de un curso.
+ *
+ * @param mysqli $conexion - Objeto de conexión a la base de datos.
+ * @param int $curso_id - ID del curso del cual se mostrarán las lecciones.
+ * @return string - Cadena que contiene la información de las lecciones del curso.
+ */
 function MostrarLeccion($conexion, $curso_id) {
-    $conexion = conectarBaseDeDatos();
-    // Consulta para obtener los datos de la tabla "curso"
-    $resultado = "SELECT * FROM leccion where curso_id =$curso_id";
-    $resultado = mysqli_query($conexion, $resultado);
+    // Se ha eliminado la línea que establece una nueva conexión, ya que se está pasando como parámetro
+
+    // Consulta para obtener los datos de la tabla "leccion" filtrados por curso_id
+    $consulta = "SELECT * FROM leccion WHERE curso_id = $curso_id";
+    $resultado = mysqli_query($conexion, $consulta);
 
     // Inicializar `$salida`
     $salida = '';
-    $salida .= 'LECCIONES'.'<br>';
-    // Mostrar los datos de la tabla "curso"
+    $salida .= 'LECCIONES' . '<br>';
+
+    // Mostrar los datos de la tabla "leccion"
     while ($fila = mysqli_fetch_assoc($resultado)) {
-       
-        $salida .= '<tr >';
-        $salida .= '<td>' ."Titulo:  ". $fila['titulo'] . '</td>' . '<br>';
-        $salida .= '<td>' ."Descripcion:  ". $fila['descripcion'] . '</td>' . '<br>';
-        $salida .= '</tr>'.'<br>';
+        $salida .= '<tr>';
+        $salida .= '<td>' . "Título: " . $fila['titulo'] . '</td>' . '<br>';
+        $salida .= '<td>' . "Descripción: " . $fila['descripcion'] . '</td>' . '<br>';
+        $salida .= '</tr>' . '<br>';
     }
 
     // Devolver `$salida`
